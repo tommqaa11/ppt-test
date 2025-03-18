@@ -1,0 +1,1436 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智慧穿搭助手商业计划书</title>
+    <style>
+        /* Updated global styles for a modern look */
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #50e3c2;
+            --accent-color: #f5a623;
+            --dark-color: #34495e;
+            --light-color: #ecf0f1;
+            --text-color: #2c3e50;
+            --slide-transition: transform 0.8s ease, opacity 0.8s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+
+        body {
+            background-color: var(--light-color);
+            color: var(--text-color);
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        /* 幻灯片容器 */
+        .slides-container {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* 幻灯片样式 */
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 40px;
+            background-color: white;
+            transform: translateX(100%);
+            opacity: 0;
+            transition: var(--slide-transition);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .slide.active {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        /* 标题样式 */
+        .slide-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .slide-title {
+            font-size: 2.8rem;
+            color: var(--primary-color);
+            font-weight: bold;
+            margin-bottom: 25px;
+        }
+
+        .slide-subtitle {
+            font-size: 1.6rem;
+            color: var(--dark-color);
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        /* 内容区域 */
+        .slide-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .content-box {
+            background-color: var(--light-color);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        /* 导航按钮 */
+        .nav-buttons {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.4s ease;
+        }
+
+        .nav-btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-3px);
+        }
+
+        .nav-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* 菜单 */
+        .menu-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 1001;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .menu {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 300px;
+            height: 100%;
+            background-color: var(--light-color);
+            z-index: 1000;
+            transition: right 0.3s ease;
+            box-shadow: -5px 0 20px rgba(0, 0, 0, 0.15);
+            padding: 80px 20px 20px;
+            overflow-y: auto;
+        }
+
+        .menu.open {
+            right: 0;
+        }
+
+        .menu-item {
+            padding: 15px;
+            cursor: pointer;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            transition: all 0.2s ease;
+        }
+
+        .menu-item:hover {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .menu-item.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* 图表和列表样式 */
+        .chart-container {
+            width: 100%;
+            height: 300px;
+            margin: 20px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        ul, ol {
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        /* 表格样式 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e1e1e1;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        /* 项目点样式 */
+        .point-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .point-item {
+            flex: 1 1 calc(50% - 20px);
+            min-width: 250px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .point-title {
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .point-content {
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .icon {
+            margin-right: 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 响应式设计 */
+        @media screen and (max-width: 768px) {
+            .slide {
+                padding: 20px;
+            }
+
+            .slide-title {
+                font-size: 2.2rem;
+            }
+
+            .slide-subtitle {
+                font-size: 1.4rem;
+            }
+
+            .point-item {
+                flex: 1 1 100%;
+            }
+
+            .chart-container {
+                height: 250px;
+            }
+        }
+
+        /* 进度指示器 */
+        .progress-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            height: 5px;
+            background-color: var(--primary-color);
+            transition: width 0.3s ease;
+            z-index: 1000;
+        }
+
+        /* 强调文本 */
+        .highlight {
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mb-20 {
+            margin-bottom: 20px;
+        }
+
+        .two-columns {
+            display: flex;
+            gap: 30px;
+        }
+
+        .column {
+            flex: 1;
+        }
+
+        @media screen and (max-width: 768px) {
+            .two-columns {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="slides-container" id="slides-container">
+        <!-- 封面幻灯片 -->
+        <div class="slide active" id="slide-1">
+            <div class="slide-content text-center">
+                <svg width="150" height="150" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="45" fill="#5c6bc0" />
+                    <path d="M35,30 Q50,20 65,30 Q80,40 65,70 Q50,80 35,70 Q20,40 35,30" fill="#ffffff" />
+                    <circle cx="50" cy="40" r="5" fill="#5c6bc0" />
+                    <path d="M40,55 Q50,65 60,55" stroke="#5c6bc0" stroke-width="2" fill="none" />
+                </svg>
+                <h1 class="slide-title" style="font-size: 3rem; margin-top: 20px;">智慧穿搭助手</h1>
+                <h2 class="slide-subtitle">商业计划书</h2>
+                <p style="font-size: 1.2rem; margin-top: 40px; color: #666;">AI 驱动的个性化穿搭推荐平台</p>
+            </div>
+        </div>
+
+        <!-- 目录幻灯片 -->
+        <div class="slide" id="slide-2">
+            <h1 class="slide-title">目录</h1>
+            <div class="slide-content">
+                <div class="content-box">
+                    <ol style="list-style-type: decimal; font-size: 1.2rem; line-height: 2;">
+                        <li>项目简介</li>
+                        <li>行业概况</li>
+                        <li>产品介绍</li>
+                        <li>市场分析</li>
+                        <li>商业模式</li>
+                        <li>团队情况</li>
+                        <li>发展规划</li>
+                        <li>财务预测</li>
+                        <li>融资计划</li>
+                        <li>风险分析</li>
+                        <li>参考资料</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <!-- 项目简介幻灯片 -->
+        <div class="slide" id="slide-3">
+            <h1 class="slide-title">项目简介</h1>
+            <div class="slide-content">
+                <div class="content-box">
+                    <p style="font-size: 1.2rem; line-height: 1.6; margin-bottom: 20px;">
+                        「智慧穿搭助手」是一款基于人工智能技术的个性化穿搭推荐应用，旨在解决用户"衣柜满满却无衣可穿"的普遍困境。通过AI技术，为用户提供个性化穿搭推荐、虚拟试衣体验、AI穿搭评价等一站式解决方案，帮助用户轻松应对各种场合的穿着需求，充分利用个人衣物资源。
+                    </p>
+                    
+                    <h3 class="slide-subtitle" style="font-size: 1.5rem;">项目愿景</h3>
+                    <p style="font-size: 1.2rem; line-height: 1.6; margin-bottom: 20px;">
+                        打造全球领先的AI时尚科技平台，让每一位用户轻松获得专业级的个性化穿搭服务，释放衣橱潜能，提升个人形象与自信。
+                    </p>
+                    
+                    <h3 class="slide-subtitle" style="font-size: 1.5rem;">核心价值</h3>
+                    <div class="point-container">
+                        <div class="point-item">
+                            <div class="point-title">
+                                <svg class="icon" width="24" height="24" viewBox="0 0 24 24">
+                                    <path fill="#5c6bc0" d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M12,10.5A1.5,1.5 0 0,1 13.5,12A1.5,1.5 0 0,1 12,13.5A1.5,1.5 0 0,1 10.5,12A1.5,1.5 0 0,1 12,10.5Z" />
+                                </svg>
+                                个性化
+                            </div>
+                            <div class="point-content">尊重每个用户的独特风格与需求</div>
+                        </div>
+                        <div class="point-item">
+                            <div class="point-title">
+                                <svg class="icon" width="24" height="24" viewBox="0 0 24 24">
+                                    <path fill="#5c6bc0" d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M12,10.5A1.5,1.5 0 0,1 13.5,12A1.5,1.5 0 0,1 12,13.5A1.5,1.5 0 0,1 10.5,12A1.5,1.5 0 0,1 12,10.5Z" />
+                                </svg>
+                                专业性
+                            </div>
+                            <div class="point-content">提供媲美专业造型师的穿搭建议</div>
+                        </div>
+                        <div class="point-item">
+                            <div class="point-title">
+                                <svg class="icon" width="24" height="24" viewBox="0 0 24 24">
+                                    <path fill="#5c6bc0" d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M12,10.5A1.5,1.5 0 0,1 13.5,12A1.5,1.5 0 0,1 12,13.5A1.5,1.5 0 0,1 10.5,12A1.5,1.5 0 0,1 12,10.5Z" />
+                                </svg>
+                                便捷性
+                            </div>
+                            <div class="point-content">化繁为简，轻松解决日常穿搭困扰</div>
+                        </div>
+                        <div class="point-item">
+                            <div class="point-title">
+                                <svg class="icon" width="24" height="24" viewBox="0 0 24 24">
+                                    <path fill="#5c6bc0" d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M12,10.5A1.5,1.5 0 0,1 13.5,12A1.5,1.5 0 0,1 12,13.5A1.5,1.5 0 0,1 10.5,12A1.5,1.5 0 0,1 12,10.5Z" />
+                                </svg>
+                                可持续
+                            </div>
+                            <div class="point-content">提高用户已有衣物的利用率，促进可持续时尚理念</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 行业概况幻灯片 -->
+        <div class="slide" id="slide-4">
+            <h1 class="slide-title">行业概况</h1>
+            <div class="slide-content">
+                <div class="content-box">
+                    <h3 class="slide-subtitle" style="font-size: 1.5rem;">市场规模</h3>
+                    <p style="margin-bottom: 20px;">
+                        根据弗若斯特沙利文研究报告（2023），全球智能时尚市场呈现快速增长趋势，预计2024-2027年复合年增长率将达到25.7%，到2027年市场规模将突破320亿美元。其中亚太地区增长尤为迅猛，中国市场占比将达到全球的35%以上。
+                    </p>
+                    
+                    <div class="chart-container">
+                        <svg width="100%" height="100%" viewBox="0 0 800 400">
+                            <text x="400" y="30" text-anchor="middle" font-size="18" font-weight="bold">全球智能时尚市场规模预测(单位:亿美元)</text>
+                            <!-- X轴 -->
+                            <line x1="100" y1="350" x2="700" y2="350" stroke="#333" stroke-width="2"/>
+                            <!-- Y轴 -->
+                            <line x1="100" y1="50" x2="100" y2="350" stroke="#333" stroke-width="2"/>
+                            
+                            <!-- X轴标签 -->
+                            <text x="160" y="380" text-anchor="middle">2023</text>
+                            <text x="280" y="380" text-anchor="middle">2024</text>
+                            <text x="400" y="380" text-anchor="middle">2025</text>
+                            <text x="520" y="380" text-anchor="middle">2026</text>
+                            <text x="640" y="380" text-anchor="middle">2027</text>
+                            
+                            <!-- Y轴标签 -->
+                            <text x="80" y="350" text-anchor="end">0</text>
+                            <text x="80" y="285" text-anchor="end">100</text>
+                            <text x="80" y="220" text-anchor="end">200</text>
+                            <text x="80" y="155" text-anchor="end">300</text>
+                            <text x="80" y="90" text-anchor="end">400</text>
+                            
+                            <!-- 柱状图 -->
+                            <rect x="130" y="290" width="60" height="60" fill="#5c6bc0" />
+                            <rect x="250" y="270" width="60" height="80" fill="#5c6bc0" />
+                            <rect x="370" y="245" width="60" height="105" fill="#5c6bc0" />
+                            <rect x="490" y="220" width="60" height="130" fill="#5c6bc0" />
+                            <rect x="610" y="190" width="60" height="160" fill="#5c6bc0" />
+                            
+                            <!-- 数值标签 -->
+                            <text x="160" y="280" text-anchor="middle" fill="white" font-weight="bold">120</text>
+                            <text x="280" y="260" text-anchor="middle" fill="white" font-weight="bold">160</text>
+                            <text x="400" y="235" text-anchor="middle" fill="white" font-weight="bold">210</text>
+                            <text x="520" y="210" text-anchor="middle" fill="white" font-weight="bold">260</text>
+                            <text x="640" y="180" text-anchor="middle" fill="white" font-weight="bold">320</text>
+                        </svg>
+                    </div>
+                    
+                    <h3 class="slide-subtitle" style="font-size: 1.5rem;">行业趋势</h3>
+                    <div class="point-container">
+                        <div class="point-item">
+                            <div class="point-title">
+                                <svg class="icon" width="24" height="24" viewBox="0 0 24 24">
+                                    <path fill="#5c6bc0" d="M21,16V4H3V16H21M21,2A2,2 0 0,1 23,4V16A2,2 0 0,1 21,18H14V20H16V22H8V20H10V18H3A2,2 0 0,1 1,16V4A2,2 0 0,1 3,2H21M5,6H14V11H5V6M15,6H19V8H15V6M19,9V14H15V9H19M5,12H9V14H5V12M10,12H14V14H10V12Z" />
+                                </svg>
+                                AI技术融入时尚产业
+                            </div>
+                            <div class="point-content">大语言模型和计算机视觉技术正深度赋能时尚行业，创造个性化体验</div>
+                        </div>
+                        <div class="point-item">
+                            <div class="point-title">
+                                <svg class="icon" width="24" height="24" viewBox="0 0 24 24">
+                                    <path fill="#5c6bc0" d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,8.39C13.57,9.4 15.42,10 17.42,10C18.2,10 18.95,9.91 19.67,9.74C19.88,10.45 20,11.21 20,12C20,16.41 16.41,20 12,20C9,20 6.39,18.34 5,15.89L6.61,14V16H13.04L14.83,14.21L16.62,16L18,14.41L13.04,9.45L12,8.39M12,4C14.96,4 17.54,5.61 18.92,8H12C10.06,8 8.45,7.38 8.08,7.58C9.18,5.5 11.36,4 14,4H12Z" />
+                                </svg>
+                                数字化试衣技术成熟
+                            </div>
+                            <div class="point-content">虚拟试衣技术（如VITON-HD）日趋成熟，为用户提供近真实体验</div>
+                        </div>
+                        <div class="point-item">
+                            <div class="point-title">
+                                <svg class="icon" width="24" height="24" viewBox="0 0 24 24">
+                                    <path fill="#5c6bc0" d="M17.45,15.18L22,7.31V19L22,21H2V3H4V15.54L9.5,6L16,9.78L20.24,2.45L21.97,3.45L16.74,12.5L10.23,8.75L4.31,19H6.57L10.96,11.44L17.45,15.18Z" />
+                                </svg>
+                                用户消费习惯变革
+                            </div>
+                            <div class="point-content">后疫情时代消费者更注重线上购物体验与个性化服务</div>
+                        </div>
+                        <div class="point-item">
+                            <div class="point-title">
+                                <svg class="icon" width="24" height="24" viewBox="0 0 24 24">
+                                    <path fill="#5c6bc0" d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9A3,3 0 0,1 15,12Z" />
+                                </svg>
+                                可持续时尚理念普及
+                            </div>
+                            <div class="point-content">提高已有衣物利用率、减少冲动消费的理念获得广泛认同</div>
+                        </div>
+                        <div class="point-item">
+                            <div class="point-title">
+                                <svg class="icon" width="24" height="24" viewBox="0 0 24 24">
+                                    <path fill="#5c6bc0" d="M16,13C15.71,13 15.38,13 15.03,13.05C16.19,13.89 17,15 17,16.5V19H23V16.5C23,14.17 18.33,13 16,13M8,13C5.67,13 1,14.17 1,16.5V19H15V16.5C15,14.17 10.33,13 8,13M8,11A3,3 0 0,0 11,8A3,3 0 0,0 8,5A3,3 0 0,0 5,8A3,3 0 0,0 8,11M16,11A3,3 0 0,0 19,8A3,3 0 0,0 16,5A3,3 0 0,0 13,8A3,3 0 0,0 16,11Z" />
+                                </svg>
+                                社交化穿搭分享兴起
+                            </div>
+                            <div class="point-content">穿搭社区成为用户获取灵感和分享经验的重要渠道</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 产品介绍幻灯片 -->
+        <div class="slide" id="slide-5">
+            <h1 class="slide-title">产品介绍</h1>
+            <div class="slide-content">
+                <div class="content-box">
+                    <h3 class="slide-subtitle" style="font-size: 1.5rem;">核心功能</h3>
+                    <div class="two-columns">
+                        <div class="column">
+                            <div class="point-item" style="margin-bottom: 15px;">
+                                <div class="point-title">
+                                    <svg class="icon" width="24" height="24" viewBox="0 0 24 24">
+                                        <path fill="#5c6bc0" d="M21,16.5C21,16.88 20.79,17.21 20.47,17.38L12.57,21.82C12.41,21.94 12.21,22 12,22C11.79,22 11.59,21.94 11.43,21.82L3.53,17.38C3.21,17.21 3,16.88 3,16.5V7.5C3,7.12 3.21,6.79 3.53,6.62L11.43,2.18C11.59,2.06 11.79,2 12,2C12.21,2 12.41,2.06 12.57,2.18L20.47,6.62C20.79,6.79 21,7.12 21,7.5V16.5M12,4.15L6.04,7.5L12,10.85L17.96,7.5L12,4.15M5,15.91L11,19.29V12.58L5,9.21V15.91M19,15.91V9.21L13,12.58V19.29L19,15.91Z" />
+                                    </svg>
+                                    智能穿搭推荐
+                                </div>
+                                <div class="point-content">
+                                    <ul>
+                                        <li>基于场景、天气、日程的个性化穿搭方案</li>
+                                        <li>每日一搭自动推荐</li>
+                                        <li>AI对话式穿搭方案优化</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="point-item" style="margin-bottom: 15px;">
+                                <div class="point-title">
+                                    <svg class="icon" width="24" height="24" viewBox="0 0 24 24">
+                                        <path fill="#5c6bc0" d="M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9M12,4.5C17,4.5 21.27,7.61 23,12C21.27,16.39 17,19.5 12,19.5C7,19.5 2.73,16.39 1,12C2.73,7.61 7,4.5 12,4.5M3.18,12C4.83,15.36 8.24,17.5 12,17.5C15.76,17.5 19.17,15.36 20.82,12C19.17,8.64 15.76,6.5 12,6.5C8.24,6.5 4.83,8.64 3.18,12Z" />
+                                    </svg>
+                                    虚拟试衣体验
+                                </div>
+                                <div class="point-content">
+                                    <ul>
+                                        <li>高精度虚拟换装效果</li>
+                                        <li>多角度试衣效果展示</li>
+                                        <li>实时试衣互动体验</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="point-item" style="margin-bottom: 15px;">
+                                <div class="point-title">
+                                    <svg class="icon" width="24" height="24" viewBox="0 0 24 24">
+                                        <path fill="#5c6bc0" d="M13.5,2C13.79,2 14.05,2.14 14.2,2.37L18.66,9.25L18.75,9.25C20.82,9.67 22,10.5 22,12C22,13.5 20.82,14.34 18.75,14.76V14.76L18.66,14.76L14.2,21.63C14.05,21.86 13.79,22 13.5,22H4C3.45,22 3,21.55 3,21V12V3C3,2.45 3.45,2 4,2H13.5M7,6A1,1 0 0,0 6,7A1,1 0 0,0 7,8A1,1 0 0,0 8,7A1,1 0 0,0 7,6M13.5,6.38L10.9,10.5C11.57,10.78 12.13,11.19 12.55,11.67C13.22,12.42 13.05,13.35 12.55,13.97C11.95,14.76 10.3,14.82 9.4,14C8.73,13.36 8.46,12.44 8.46,12.27C8.17,12.28 7.55,12.31 7.03,12.31L5.5,12.31L13.5,6.38M7,16A1,1 0 0,0 6,17A1,1 0 0,0 7,18A1,1 0 0,0 8,17A1,1 0 0,0 7,16Z" />
+                                    </svg>
+                                    个人衣柜管理
+                                </div>
+                                <div class="point-content">
+                                    <ul>
+                                        <li>智能分类与标签管理</li>
+                                        <li>穿着频率与搭配历史记录</li>
+                                        <li>衣物利用率分析</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="point-item" style="margin-bottom: 15px;">
+                                <div class="point-title">
+                                    <svg class="icon" width="24" height="24" viewBox="0 0 24 24">
+                                        <path fill="#5c6bc0" d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M9,14H15V16H9M9,12H15V13H9M9,9H15V11H9" />
+                                    </svg>
+                                    AI穿搭评价
+                                </div>
+                                <div class="point-content">
+                                    <ul>
+                                        <li>专业视角的穿搭分析</li>
+                                        <li>多维度评价与改进建议</li>
+                                        <li>个性化穿搭学习路径</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="point-item" style="margin-bottom: 15px;">
+                                <div class="point-title">
+                                    <svg class="icon" width="24" height="24" viewBox="0 0 24 24">
+                                        <path fill="#5c6bc0" d="M12,5.5A3.5,3.5 0 0,1 15.5,9A3.5,3.5 0 0,1 12,12.5A3.5,3.5 0 0,1 8.5,9A3.5,3.5 0 0,1 12,5.5M5,8C5.56,8 6.08,8.15 6.53,8.42C6.38,9.85 6.8,11.27 7.66,12.38C7.16,13.34 6.16,14 5,14A3,3 0 0,1 2,11A3,3 0 0,1 5,8M19,8A3,3 0 0,1 22,11A3,3 0 0,1 19,14C17.84,14 16.84,13.34 16.34,12.38C17.2,11.27 17.62,9.85 17.47,8.42C17.92,8.15 18.44,8 19,8M5.5,18.25C5.5,16.18 8.41,14.5 12,14.5C15.59,14.5 18.5,16.18 18.5,18.25V20H5.5V18.25M0,20V18.5C0,17.11 1.89,15.94 4.45,15.6C3.86,16.28 3.5,17.22 3.5,18.25V20H0M24,20H20.5V18.25C20.5,17.22 20.14,16.28 19.55,15.6C22.11,15.94 24,17.11 24,18.5V20Z" />
+                                    </svg>
+                                    穿搭社区
+                                </div>
+                                <div class="point-content">
+                                    <ul>
+                                        <li>穿搭灵感分享与交流</li>
+                                        <li>专业时尚博主合作推广</li>
+                                        <li>季节性穿搭指南与热点话题</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="point-item" style="margin-bottom: 15px;">
+                                <div class="point-title">
+                                    <svg class="icon" width="24" height="24" viewBox="0 0 24 24">
+                                        <path fill="#5c6bc0" d="M19,19H5V8H19M16,1V3H8V1H6V3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3H18V1M17,12H12V17H17V12Z" />
+                                    </svg>
+                                    日程管理
+                                </div>
+                                <div class="point-content">
+                                    <ul>
+                                        <li>活动场景与穿搭需求关联</li>
+                                        <li>基于日程的穿搭预规划</li>
+                                        <li>穿搭与行程一体化管理</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="slide-subtitle" style="font-size: 1.5rem; margin-top: 20px;">技术亮点</h3>
+                    <div class="point-container">
+                        <div class="point-item">
+                            <div class="point-title">
+                                <svg class="icon" width="24" height="24" viewBox="0 0 24 24">
+                                    <path fill="#5c6bc0" d="M16.36,14C16.44,13.34 16.5,12.68 16.5,12C16.5,11.32 16.44,10.66 16.36,10H19.74C19.9,10.64 20,11.31 20,12C20,12.69 19.9,13.36 19.74,14M14.59,19.56C15.19,18.45 15.65,17.25 15.97,16H18.92C17.96,17.65 16.43,18.93 14.59,19.56M14.34,14H9.66C9.56,13.34 9.5,12.68 9.5,12C9.5,11.32 9.56,10.65 9.66,10H14.34C14.43,10.65 14.5,11.32 14.5,12C14.5,12.68 14.43,13.34 14.34,14M12,19.96C11.17,18.76 10.5,17.43 10.09,16H13.91C13.5,17.43 12.83,18.76 12,19.96M8,8H5.08C6.03,6.34 7.57,5.06 9.4,4.44C8.8,5.55 8.35,6.75 8,8M5.08,16H8C8.35,17.25 8.8,18.45 9.4,19.56C7.57,18.93 6.03,17.65 5.08,16M4.26,14C4.1,13.36 4,12.69 4,12C4,11.31 4.1,10.64 4.26,10H7.64C7.56,10.66 7.5,11.32 7.5,12C7.5,12.68 7.56,13.34 7.64,14M12,4.03C12.83,5.23 13.5,6.57 13.91,8H10.09C10.5,6.57 11.17,5.23 12,4.03M18.92,8H15.97C15.65,6.75 15.19,5.55 14.59,4.44C16.43,5.07 17.96,6.34 18.92,8M12,2C6.47,2 2,6.5 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" />
+                                </svg>
+                                RAG技术应用
+                            </div>
+                            <div class="point-content">采用检索增强生成技术提升AI穿搭推荐的专业性和个性化程度</div>
+                        </div>
+                        <div class="point-item">
+                            <div class="point-title">
+                                <svg class="icon" width="24" height="24" viewBox="0 0 24 24">
+                                    <path fill="#5c6bc0" d="M13,9H18.5L13,3.5V9M6,2H14L20,8V20A2,2 0 0,1 18,22H6C4.89,22 4,21.1 4,20V4C4,2.89 4.89,2 6,2M6,20H15L18,20V12L14,16L12,14L6,20M8,9A2,2 0 0,0 6,11A2,2 0 0,0 8,13A2,2 0 0,0 10,11A2,2 0 0,0 8,9Z" />
+                                </svg>
+                                VITON-HD虚拟试衣
+                            </div>
+                            <div class="point-content">应用CVPR 2022发布的高分辨率虚拟试衣技术，效果真实度高</div>
+                        </div>
+                        <div class="point-item">
+                            <div class="point-title">
+                                <svg class="icon" width="24" height="24" viewBox="0 0 24 24">
+                                    <path fill="#5c6bc0" d="M20,4C21.11,4 22,4.89 22,6V18C22,19.11 21.11,20 20,20H4C2.89,20 2,19.11 2,18V6C2,4.89 2.89,4 4,4H20M8.5,15V9H7.25V12.5L4.75,9H3.5V15H4.75V11.5L7.3,15H8.5M13.5,10.26V9H9.5V15H13.5V13.75H11V12.64H13.5V11.38H11V10.26H13.5M20.5,14V9H19.25V13.5H18.13V10H16.88V13.5H15.75V9H14.5V14A1,1 0 0,0 15.5,15H19.5A1,1 0 0,0 20.5,14Z" />
+                                </svg>
+                                Stable Diffusion优化
+                            </div>
+                            <div class="point-content">在时尚图像生成中的特殊优化，提供高质量穿搭效果图</div>
+                        </div>
+                        <div class="point-item">
+                            <div class="point-title">
+                                <svg class="icon" width="24" height="24" viewBox="0 0 24 24">
+                                    <path fill="#5c6bc0" d="M9,5V9H21V5M9,19H21V15H9M9,14H21V10H9M4,9H8V5H4M4,19H8V15H4M4,14H8V10H4V14Z" />
+                                </svg>
+                                多模态大模型
+                            </div>
+                            <div class="point-content">结合文本、图像理解能力，提供专业穿搭评价与建议</div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="slide-subtitle" style="font-size: 1.5rem; margin-top: 20px;">产品优势</h3>
+                    <div class="chart-container">
+                        <svg width="100%" height="100%" viewBox="0 0 800 400">
+                            <text x="400" y="30" text-anchor="middle" font-size="18" font-weight="bold">市场竞争格局分析</text>
+                            
+                            <!-- 坐标轴 -->
+                            <line x1="100" y1="350" x2="700" y2="350" stroke="#333" stroke-width="2"/>
+                            <line x1="100" y1="50" x2="100" y2="350" stroke="#333" stroke-width="2"/>
+                            
+                            <!-- 坐标标签 -->
+                            <text x="400" y="380" text-anchor="middle">技术先进性</text>
+                            <text x="60" y="200" text-anchor="middle" transform="rotate(-90, 60, 200)">用户体验</text>
+                            <text x="100" y="370" text-anchor="middle">低</text>
+                            <text x="700" y="370" text-anchor="middle">高</text>
+                            <text x="80" y="350" text-anchor="end">低</text>
+                            <text x="80" y="50" text-anchor="end">高</text>
+                            
+                            <!-- 象限标注 -->
+                            <text x="200" y="100" text-anchor="middle" font-size="14">市场潜力区</text>
+                            <text x="600" y="100" text-anchor="middle" font-size="14">领先区</text>
+                            <text x="200" y="300" text-anchor="middle" font-size="14">改进区</text>
+                            <text x="600" y="300" text-anchor="middle" font-size="14">特色区</text>
+                            
+                            <!-- 十字分割线 -->
+                            <line x1="100" y1="200" x2="700" y2="200" stroke="#ccc" stroke-width="1" stroke-dasharray="5,5"/>
+                            <line x1="400" y1="50" x2="400" y2="350" stroke="#ccc" stroke-width="1" stroke-dasharray="5,5"/>
+                            
+                            <!-- 数据点 -->
+                            <circle cx="580" cy="80" r="15" fill="#5c6bc0"/>
+                            <text x="580" y="85" text-anchor="middle" font-size="12" fill="white">我们</text>
+                            
+                            <circle cx="520" cy="170" r="10" fill="#8e99f3"/>
+                            <text x="520" y="175" text-anchor="middle" font-size="10" fill="white">竞品A</text>
+                            
+                            <circle cx="350" cy="110" r="10" fill="#8e99f3"/>
+                            <text x="350" y="115" text-anchor="middle" font-size="10" fill="white">竞品B</text>
+                            
+                            <circle cx="600" cy="200" r="10" fill="#8e99f3"/>
+                            <text x="600" y="205" text-anchor="middle" font-size="10" fill="white">竞品C</text>
+                            
+                            <circle cx="200" cy="250" r="10" fill="#8e99f3"/>
+                            <text x="200" y="255" text-anchor="middle" font-size="10" fill="white">竞品D</text>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 市场分析幻灯片 -->
+        <div class="slide" id="slide-6">
+            <h1 class="slide-title">市场分析</h1>
+            <div class="slide-content">
+                <div class="content-box">
+                    <h3 class="slide-subtitle" style="font-size: 1.5rem;">目标用户画像</h3>
+                    <div class="point-container">
+                        <div class="point-item">
+                            <div class="point-title">
+                                <svg class="icon" width="24" height="24" viewBox="0 0 24 24">
+                                    <path fill="#5c6bc0" d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,6A2,2 0 0,0 10,8A2,2 0 0,0 12,10A2,2 0 0,0 14,8A2,2 0 0,0 12,6M12,13C14.67,13 20,14.33 20,17V20H4V17C4,14.33 9.33,13 12,13M12,14.9C9.03,14.9 5.9,16.36 5.9,17V18.1H18.1V17C18.1,16.36 14.97,14.9 12,14.9Z" />
+                                </svg>
+                                职场人士 <span style="font-size: 0.9rem; color: #666;">(45%)</span>
+                            </div>
+                            <div class="point-content">
+                                <p><strong>年龄范围：</strong>25-45岁</p>
+                                <p><strong>特点：</strong>时间宝贵，注重形象，需要便捷且专业的穿搭建议</p>
+                                <p><strong>痛点：</strong>每日穿搭决策压力大，缺乏搭配灵感，追求职场形象提升</p>
+                                <p><strong>价值主张：</strong>提供高效、专业的穿搭方案，节省决策时间</p>
+                            </div>
+                        </div>
+                        <div class="point-item">
+                            <div class="point-title">
+                                <svg class="icon" width="24" height="24" viewBox="0 0 24 24">
+                                    <path fill="#5c6bc0" d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,6A2,2 0 0,0 10,8A2,2 0 0,0 12,10A2,2 0 0,0 14,8A2,2 0 0,0 12,6M12,13C14.67,13 20,14.33 20,17V20H4V17C4,14.33 9.33,13 12,13M12,14.9C9.03,14.9 5.9,16.36 5.9,17V18.1H18.1V17C18.1,16.36 14.97,14.9 12,14.9Z" />
+                                </svg>
+                                时尚爱好者 <span style="font-size: 0.9rem; color: #666;">(30%)</span>
+                            </div>
+                            <div class="point-content">
+                                <p><strong>年龄范围：</strong>18-35岁</p>
+                                <p><strong>特点：</strong>热衷尝试新风格，积极参与社区互动，注重个人风格表达</p>
+                                <p><strong>痛点：</strong>渴望个性化表达，需要专业意见验证，寻求穿搭灵感</p>
+                                <p><strong>价值主张：</strong>提供创意穿搭建议，专业评价与社区认同</p>
+                            </div>
+                        </div>
+                        <div class="point-item">
+                            <div class="point-title">
+                                <svg class="icon" width="24" height="24" viewBox="0 0 24 24">
+                                    <path fill="#5c6bc0" d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,6A2,2 0 0,0 10,8A2,2 0 0,0 12,10A2,2 0 0,0 14,8A2,2 0 0,0 12,6M12,13C14.67,13 20,14.33 20,17V20H4V17C4,14.33 9.33,13 12,13M12,14.9C9.03,14.9 5.9,16.36 5.9,17V18.1H18.1V17C18.1,16.36 14.97,14.9 12,14.9Z" />
+                                </svg>
+                                实用主义者 <span style="font-size: 0.9rem; color: #666;">(25%)</span>
+                            </div>
+                            <div class="point-content">
+                                <p><strong>年龄范围：</strong>30-50岁</p>
+                                <p><strong>特点：</strong>注重衣物管理和实用搭配，追求价值最大化</p>
+                                <p><strong>痛点：</strong>衣柜管理混乱，衣物利用率低，缺乏搭配意识</p>
+                                <p><strong>价值主张：</strong>提高已有衣物利用率，实用穿搭建议，简化衣物管理</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="slide-subtitle" style="font-size: 1.5rem; margin-top: 20px;">用户需求分析</h3>
+                    <p style="margin-bottom: 20px;">市场调研显示：</p>
+                    <div class="chart-container">
+                        <svg width="100%" height="100%" viewBox="0 0 800 400">
+                            <text x="400" y="30" text-anchor="middle" font-size="18" font-weight="bold">用户痛点分布</text>
+                            
+                            <!-- 饼图 -->
+                            <g transform="translate(400, 200)">
+                                <!-- 穿搭决策压力 81% -->
+                                <path d="M0,0 L0,-150 A150,150 0 0,1 142.6,-47.5 Z" fill="#5c6bc0" />
+                                <text x="75" y="-100" text-anchor="middle" fill="white" font-weight="bold">81%</text>
+                                <text x="90" y="-80" text-anchor="middle" fill="white" font-size="11">穿搭决策压力</text>
+                                
+                                <!-- 特殊场合缺乏信心 73% -->
+                                <path d="M0,0 L142.6,-47.5 A150,150 0 0,1 103.9,108.5 Z" fill="#8e99f3" />
+                                <text x="120" y="30" text-anchor="middle" fill="white" font-weight="bold">73%</text>
+                                <text x="120" y="50" text-anchor="middle" fill="white" font-size="11">特殊场合缺乏信心</text>
+                                
+                                <!-- 衣物利用率低 65% -->
+                                <path d="M0,0 L103.9,108.5 A150,150 0 0,1 -65,135 Z" fill="#9fa8da" />
+                                <text x="50" y="120" text-anchor="middle" fill="white" font-weight="bold">65%</text>
+                                <text x="50" y="140" text-anchor="middle" fill="white" font-size="11">衣物利用率低</text>
+                                
+                                <!-- 缺乏专业建议 58% -->
+                                <path d="M0,0 L-65,135 A150,150 0 0,1 -142.6,-47.5 Z" fill="#c5cae9" />
+                                <text x="-85" y="65" text-anchor="middle" fill="white" font-weight="bold">58%</text>
+                                <text x="-85" y="85" text-anchor="middle" fill="white" font-size="11">缺乏专业建议</text>
+                                
+                                <!-- 形象不自信 47% -->
+                                <path d="M0,0 L-142.6,-47.5 A150,150 0 0,1 0,-150 Z" fill="#7986cb" />
+                                <text x="-75" y="-100" text-anchor="middle" fill="white" font-weight="bold">47%</text>
+                                <text x="-75" y="-80" text-anchor="middle" fill="white" font-size="11">形象不自信</text>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 商业模式幻灯片 -->
+        <div class="slide" id="slide-7">
+            <h1 class="slide-title">商业模式</h1>
+            <div class="slide-content">
+                <div class="content-box">
+                    <h3 class="slide-subtitle" style="font-size: 1.5rem;">收入来源</h3>
+                    <div class="two-columns">
+                        <div class="column">
+                            <div class="point-item" style="margin-bottom: 15px;">
+                                <div class="point-title">
+                                    <svg class="icon" width="24" height="24" viewBox="0 0 24 24">
+                                        <path fill="#5c6bc0" d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z" />
+                                    </svg>
+                                    会员订阅
+                                </div>
+                                <div class="point-content">
+                                    <ul>
+                                        <li><strong>基础版：</strong>免费使用基本功能</li>
+                                        <li><strong>高级版：</strong>¥28/月，无限AI问答，高级穿搭方案</li>
+                                        <li><strong>专业版：</strong>¥68/月，无限虚拟试衣，专属造型师服务</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="point-item" style="margin-bottom: 15px;">
+                                <div class="point-title">
+                                    <svg class="icon" width="24" height="24" viewBox="0 0 24 24">
+                                        <path fill="#5c6bc0" d="M12,8H4A2,2 0 0,0 2,10V14A2,2 0 0,0 4,16H5V20A1,1 0 0,0 6,21H8A1,1 0 0,0 9,20V16H12L17,20V4L12,8M21.5,12C21.5,13.71 20.54,15.26 19,16V8C20.53,8.75 21.5,10.3 21.5,12Z" />
+                                    </svg>
+                                    内容合作
+                                </div>
+                                <div class="point-content">
+                                    <ul>
+                                        <li>品牌穿搭方案定制</li>
+                                        <li>时尚KOL入驻与收益分成</li>
+                                        <li>穿搭内容付费解锁</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="point-item" style="margin-bottom: 15px;">
+                                <div class="point-title">
+                                    <svg class="icon" width="24" height="24" viewBox="0 0 24 24">
+                                        <path fill="#5c6bc0" d="M19,7H16V6A3,3 0 0,0 13,3H11A3,3 0 0,0 8,6V7H5A2,2 0 0,0 3,9V20A2,2 0 0,0 5,22H19A2,2 0 0,0 21,20V9A2,2 0 0,0 19,7M10,6A1,1 0 0,1 11,5H13A1,1 0 0,1 14,6V7H10V6M13,12L10,15L7,12H13Z" />
+                                    </svg>
+                                    电商导流
+                                </div>
+                                <div class="point-content">
+                                    <ul>
+                                        <li>基于穿搭推荐的商品联动</li>
+                                        <li>品牌服饰入驻与交易分成</li>
+                                        <li>时尚产品精准营销服务</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="point-item" style="margin-bottom: 15px;">
+                                <div class="point-title">
+                                    <svg class="icon" width="24" height="24" viewBox="0 0 24 24">
+                                        <path fill="#5c6bc0" d="M18,15H16V17H18M18,11H16V13H18M20,19H12V17H14V15H12V13H14V11H12V9H20M10,7H8V5H10M10,11H8V9H10M10,15H8V13H10M10,19H8V17H10M6,7H4V5H6M6,11H4V9H6M6,15H4V13H6M6,19H4V17H6M12,7V3H2V21H22V7H12Z" />
+                                    </svg>
+                                    企业服务
+                                </div>
+                                <div class="point-content">
+                                    <ul>
+                                        <li>企业员工形象提升方案</li>
+                                        <li>职业着装咨询定制</li>
+                                        <li>团队穿搭一体化解决方案</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="slide-subtitle" style="font-size: 1.5rem; margin-top: 20px;">预期收入结构</h3>
+                    <div class="chart-container">
+                        <svg width="100%" height="100%" viewBox="0 0 800 400">
+                            <text x="400" y="30" text-anchor="middle" font-size="18" font-weight="bold">收入结构预测</text>
+                            
+                            <!-- 饼图 -->
+                            <g transform="translate(400, 200)">
+                                <!-- 会员订阅 45% -->
+                                <path d="M0,0 L0,-150 A150,150 0 0,1 135,65 Z" fill="#5c6bc0" />
+                                <text x="70" y="-80" text-anchor="middle" fill="white" font-weight="bold">45%</text>
+                                <text x="70" y="-60" text-anchor="middle" fill="white" font-size="11">会员订阅</text>
+                                
+                                <!-- 内容合作 20% -->
+                                <path d="M0,0 L135,65 A150,150 0 0,1 30,147 Z" fill="#8e99f3" />
+                                <text x="90" y="100" text-anchor="middle" fill="white" font-weight="bold">20%</text>
+                                <text x="90" y="120" text-anchor="middle" fill="white" font-size="11">内容合作</text>
+                                
+                                <!-- 电商导流 25% -->
+                                <path d="M0,0 L30,147 A150,150 0 0,1 -127,80 Z" fill="#9fa8da" />
+                                <text x="-50" y="120" text-anchor="middle" fill="white" font-weight="bold">25%</text>
+                                <text x="-50" y="140" text-anchor="middle" fill="white" font-size="11">电商导流</text>
+                                
+                                <!-- 企业服务 10% -->
+                                <path d="M0,0 L-127,80 A150,150 0 0,1 0,-150 Z" fill="#c5cae9" />
+                                <text x="-80" y="-70" text-anchor="middle" fill="white" font-weight="bold">10%</text>
+                                <text x="-80" y="-50" text-anchor="middle" fill="white" font-size="11">企业服务</text>
+                            </g>
+                        </svg>
+                    </div>
+                    
+                    <h3 class="slide-subtitle" style="font-size: 1.5rem; margin-top: 20px;">用户增长策略</h3>
+                    <div class="point-container">
+                        <div class="point-item">
+                            <div class="point-title">
+                                <svg class="icon" width="24" height="24" viewBox="0 0 24 24">
+                                    <path fill="#5c6bc0" d="M19,3A2,2 0 0,1 21,5V19A2,2 0 0,1 19,21H5A2,2 0 0,1 3,19V5A2,2 0 0,1 5,3H19M18.5,18.5V13.2A3.26,3.26 0 0,0 15.24,9.94C14.39,9.94 13.4,10.46 12.92,11.24V10.13H10.13V18.5H12.92V13.57C12.92,12.8 13.54,12.17 14.31,12.17A1.4,1.4 0 0,1 15.71,13.57V18.5H18.5M6.88,8.56A1.68,1.68 0 0,0 8.56,6.88C8.56,5.95 7.81,5.19 6.88,5.19A1.69,1.69 0 0,0 5.19,6.88C5.19,7.81 5.95,8.56 6.88,8.56M8.27,18.5V10.13H5.5V18.5H8.27Z" />
+                                </svg>
+                                内容营销
+                            </div>
+                            <div class="point-content">
+                                <ul>
+                                    <li>高质量穿搭内容创作与分发</li>
+                                    <li>专业时尚博主合作推广</li>
+                                    <li>季节性穿搭指南与热点话题</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="point-item">
+                            <div class="point-title">
+                                <svg class="icon" width="24" height="24" viewBox="0 0 24 24">
+                                    <path fill="#5c6bc0" d="M12,5.5A3.5,3.5 0 0,1 15.5,9A3.5,3.5 0 0,1 12,12.5A3.5,3.5 0 0,1 8.5,9A3.5,3.5 0 0,1 12,5.5M5,8C5.56,8 6.08,8.15 6.53,8.42C6.38,9.85 6.8,11.27 7.66,12.38C7.16,13.34 6.16,14 5,14A3,3 0 0,1 2,11A3,3 0 0,1 5,8M19,8A3,3 0 0,1 22,11A3,3 0 0,1 19,14C17.84,14 16.84,13.34 16.34,12.38C17.2,11.27 17.62,9.85 17.47,8.42C17.92,8.15 18.44,8 19,8M5.5,18.25C5.5,16.18 8.41,14.5 12,14.5C15.59,14.5 18.5,16.18 18.5,18.25V20H5.5V18.25M0,20V18.5C0,17.11 1.89,15.94 4.45,15.6C3.86,16.28 3.5,17.22 3.5,18.25V20H0M24,20H20.5V18.25C20.5,17.22 20.14,16.28 19.55,15.6C22.11,15.94 24,17.11 24,18.5V20Z" />
+                                </svg>
+                                社交传播
+                            </div>
+                            <div class="point-content">
+                                <ul>
+                                    <li>用户分享激励机制</li>
+                                    <li>穿搭挑战与话题活动</li>
+                                    <li>社区互动与UGC内容激励</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="point-item">
+                            <div class="point-title">
+                                <svg class="icon" width="24" height="24" viewBox="0 0 24 24">
+                                    <path fill="#5c6bc0" d="M20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4H20A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20M4,6V18H20V6H4M6,9H18V11H6V9M6,13H16V15H6V13Z" />
+                                </svg>
+                                场景触达
+                            </div>
+                            <div class="point-content">
+                                <ul>
+                                    <li>重要节日与场合提醒</li>
+                                    <li>天气变化穿搭提示</li>
+                                    <li>生活场景智能触达</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="point-item">
+                            <div class="point-title">
+                                <svg class="icon" width="24" height="24" viewBox="0 0 24 24">
+                                    <path fill="#5c6bc0" d="M18,8H8V4H18M15,22H13V21H15M19,22H17V21H19M11,22H9V21H11M7,22H5V21H7M3,22H1V21H3M18,15H8V11H18M18,19H8V17H16V16H2V15H16V13H2V11H6V10H2V8H6V7H2V6H8V2H18V8H22V10H18V13H22V15H18V19Z" />
+                                </svg>
+                                品牌合作
+                            </div>
+                            <div class="point-content">
+                                <ul>
+                                    <li>时尚品牌联合推广</li>
+                                    <li>线下活动与体验</li>
+                                    <li>跨界合作拓展用户群体</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 团队情况幻灯片 -->
+        <div class="slide" id="slide-8">
+            <h1 class="slide-title">团队情况</h1>
+            <div class="slide-content">
+                <div class="content-box">
+                    <p style="margin-bottom: 20px;">核心团队成员分工如下：</p>
+                    <div style="overflow-x: auto;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>成员</th>
+                                    <th>角色</th>
+                                    <th>职责与专长</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>子豪</td>
+                                    <td>项目架构与协调</td>
+                                    <td>负责撰写相关文档和模块功能接口设计，参与论坛子模块开发，协调团队工作</td>
+                                </tr>
+                                <tr>
+                                    <td>崔哥</td>
+                                    <td>用户模块负责人</td>
+                                    <td>用户登录、注册、信息管理功能开发；衣柜与虚拟试衣子模块开发</td>
+                                </tr>
+                                <tr>
+                                    <td>牧野</td>
+                                    <td>AI穿搭功能开发</td>
+                                    <td>AI穿搭评价、穿搭方案记录相关功能开发</td>
+                                </tr>
+                                <tr>
+                                    <td>唐备</td>
+                                    <td>虚拟试衣技术专家</td>
+                                    <td>研究OOT虚拟试衣技术，实现试衣核心算法</td>
+                                </tr>
+                                <tr>
+                                    <td>国望</td>
+                                    <td>AI穿搭推荐核心</td>
+                                    <td>数据集收集、RAG技术研究、提示词工程和穿搭推荐核心功能模块搭建</td>
+                                </tr>
+                                <tr>
+                                    <td>孙哥</td>
+                                    <td>UI设计与日程模块</td>
+                                    <td>系统UI设计，日程表与天气模块开发</td>
+                                </tr>
+                                <tr>
+                                    <td>瑞哥</td>
+                                    <td>文档与协同</td>
+                                    <td>跟进团队文档和软件协同课程进度</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <h3 class="slide-subtitle" style="font-size: 1.5rem; margin-top: 30px;">团队核心优势</h3>
+                    <div class="point-container">
+                        <div class="point-item">
+                            <div class="point-title">
+                                <svg class="icon" width="24" height="24" viewBox="0 0 24 24">
+                                    <path fill="#5c6bc0" d="M14.6,16.6L19.2,12L14.6,7.4L16,6L22,12L16,18L14.6,16.6M9.4,16.6L4.8,12L9.4,7.4L8,6L2,12L8,18L9.4,16.6Z" />
+                                </svg>
+                                技术实力
+                            </div>
+                            <div class="point-content">团队核心成员在AI、计算机视觉和时尚领域拥有丰富经验</div>
+                        </div>
+                        <div class="point-item">
+                            <div class="point-title">
+                                <svg class="icon" width="24" height="24" viewBox="0 0 24 24">
+                                    <path fill="#5c6bc0" d="M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5Z" />
+                                </svg>
+                                行业洞察
+                            </div>
+                            <div class="point-content">深度理解用户穿搭痛点与需求，把握时尚科技发展趋势</div>
+                        </div>
+                        <div class="point-item">
+                            <div class="point-title">
+                                <svg class="icon" width="24" height="24" viewBox="0 0 24 24">
+                                    <path fill="#5c6bc0" d="M19,3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3M19,5V19H5V5H19Z" />
+                                </svg>
+                                执行力
+                            </div>
+                            <div class="point-content">敏捷开发流程，快速迭代产品，及时响应市场反馈</div>
+                        </div>
+                        <div class="point-item">
+                            <div class="point-title">
+                                <svg class="icon" width="24" height="24" viewBox="0 0 24 24">
+                                    <path fill="#5c6bc0" d="M12,5.5A3.5,3.5 0 0,1 15.5,9A3.5,3.5 0 0,1 12,12.5A3.5,3.5 0 0,1 8.5,9A3.5,3.5 0 0,1 12,5.5M5,8C5.56,8 6.08,8.15 6.53,8.42C6.38,9.85 6.8,11.27 7.66,12.38C7.16,13.34 6.16,14 5,14A3,3 0 0,1 2,11A3,3 0 0,1 5,8M19,8A3,3 0 0,1 22,11A3,3 0 0,1 19,14C17.84,14 16.84,13.34 16.34,12.38C17.2,11.27 17.62,9.85 17.47,8.42C17.92,8.15 18.44,8 19,8M5.5,18.25C5.5,16.18 8.41,14.5 12,14.5C15.59,14.5 18.5,16.18 18.5,18.25V20H5.5V18.25M0,20V18.5C0,17.11 1.89,15.94 4.45,15.6C3.86,16.28 3.5,17.22 3.5,18.25V20H0M24,20H20.5V18.25C20.5,17.22 20.14,16.28 19.55,15.6C22.11,15.94 24,17.11 24,18.5V20Z" />
+                                </svg>
+                                资源整合
+                            </div>
+                            <div class="point-content">与时尚行业KOL、品牌及研究机构建立良好合作关系</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 发展规划幻灯片 -->
+        <div class="slide" id="slide-9">
+            <h1 class="slide-title">发展规划</h1>
+            <div class="slide-content">
+                <div class="content-box">
+                    <h3 class="slide-subtitle" style="font-size: 1.5rem;">短期目标（1年内）</h3>
+                    <div class="two-columns">
+                        <div class="column">
+                            <div class="point-item">
+                                <div class="point-title">
+                                    <svg class="icon" width="24" height="24" viewBox="0 0 24 24">
+                                        <path fill="#5c6bc0" d="M14.3,21.7C13.6,21.9 12.8,22 12,22A10,10 0 0,1 2,12C2,6.5 6.5,2 12,2C17.5,2 22,6.5 22,12A10,10 0 0,1 14.3,21.7M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M12.1,7.1L14,11H19L15.5,13.5L16.5,18L12.1,15.6L8,18L8.9,13.5L5.5,11H10.5L12.1,7.1Z" />
+                                    </svg>
+                                    产品迭代
+                                </div>
+                                <div class="point-content">
+                                    <ul>
+                                        <li><strong>Q1：</strong>完成核心功能开发，发布MVP版本</li>
+                                        <li><strong>Q2：</strong>优化用户体验，提升AI推荐准确率至85%以上</li>
+                                        <li><strong>Q3：</strong>完善虚拟试衣效果，与真实试穿视觉差异控制在15%以内</li>
+                                        <li><strong>Q4：</strong>扩充穿搭场景库，覆盖90%常见穿搭需求</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="point-item">
+                                <div class="point-title">
+                                    <svg class="icon" width="24" height="24" viewBox="0 0 24 24">
+                                        <path fill="#5c6bc0" d="M16,13C15.71,13 15.38,13 15.03,13.05C16.19,13.89 17,15 17,16.5V19H23V16.5C23,14.17 18.33,13 16,13M8,13C5.67,13 1,14.17 1,16.5V19H15V16.5C15,14.17 10.33,13 8,13M8,11A3,3 0 0,0 11,8A3,3 0 0,0 8,5A3,3 0 0,0 5,8A3,3 0 0,0 8,11M16,11A3,3 0 0,0 19,8A3,3 0 0,0 16,5A3,3 0 0,0 13,8A3,3 0 0,0 16,11Z" />
+                                    </svg>
+                                    用户增长
+                                </div>
+                                <div class="point-content">
+                                    <ul>
+                                        <li>首月活跃用户达5万人</li>
+                                        <li>半年内月活跃用户突破15万人</li>
+                                        <li>年底月活跃用户达20万人</li>
+                                        <li>付费转化率达到5%以上</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="slide-subtitle" style="font-size: 1.5rem; margin-top: 20px;">中期目标（1-3年）</h3>
+                    <div class="two-columns">
+                        <div class="column">
+                            <div class="point-item">
+                                <div class="point-title">
+                                    <svg class="icon" width="24" height="24" viewBox="0 0 24 24">
+                                        <path fill="#5c6bc0" d="M3,6H21V18H3V6M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9M7,8A2,2 0 0,1 5,10V14A2,2 0 0,1 7,16H17A2,2 0 0,1 19,14V10A2,2 0 0,1 17,8H7Z" />
+                                    </svg>
+                                    业务拓展
+                                </div>
+                                <div class="point-content">
+                                    <ul>
+                                        <li>打造完整的时尚生态系统，接入品牌与设计师资源</li>
+                                        <li>建立品牌合作机制，实现商业变现多元化</li>
+                                        <li>开发企业级穿搭咨询服务，拓展B端市场</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="point-item">
+                                <div class="point-title">
+                                    <svg class="icon" width="24" height="24" viewBox="0 0 24 24">
+                                        <path fill="#5c6bc0" d="M12,3C7.58,3 4,4.79 4,7C4,9.21 7.58,11 12,11C16.42,11 20,9.21 20,7C20,4.79 16.42,3 12,3M4,9V12C4,14.21 7.58,16 12,16C16.42,16 20,14.21 20,12V9C20,11.21 16.42,13 12,13C7.58,13 4,11.21 4,9M4,14V17C4,19.21 7.58,21 12,21C16.42,21 20,19.21 20,17V14C20,16.21 16.42,18 12,18C7.58,18 4,16.21 4,14Z" />
+                                    </svg>
+                                    技术迭代
+                                </div>
+                                <div class="point-content">
+                                    <ul>
+                                        <li>升级AI推荐算法，准确率提升至95%</li>
+                                        <li>优化虚拟试衣技术，实现动态试衣效果</li>
+                                        <li>拓展多场景穿搭方案，覆盖更多垂直领域</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="slide-subtitle" style="font-size: 1.5rem; margin-top: 20px;">长期愿景（3-5年）</h3>
+                    <div class="two-columns">
+                        <div class="column">
+                            <div class="point-item">
+                                <div class="point-title">
+                                    <svg class="icon" width="24" height="24" viewBox="0 0 24 24">
+                                        <path fill="#5c6bc0" d="M12,11.5A2.5,2.5 0 0,1 9.5,9A2.5,2.5 0 0,1 12,6.5A2.5,2.5 0 0,1 14.5,9A2.5,2.5 0 0,1 12,11.5M12,2A7,7 0 0,0 5,9C5,14.25 12,22 12,22C12,22 19,14.25 19,9A7,7 0 0,0 12,2Z" />
+                                    </svg>
+                                    全球化布局
+                                </div>
+                                <div class="point-content">
+                                    <ul>
+                                        <li>产品本地化适配，覆盖主要国际市场</li>
+                                        <li>建立全球时尚数据库，适应不同文化穿搭需求</li>
+                                        <li>打造国际化时尚科技平台</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="point-item">
+                                <div class="point-title">
+                                    <svg class="icon" width="24" height="24" viewBox="0 0 24 24">
+                                        <path fill="#5c6bc0" d="M12.5,12H12V7H10V12H9.5V7H8V12H7.5V7H6V12H5.5V7H4V13H6V16.5L9,19L15,16.5V13H17V7H15.5V12H15V7H13.5V12H13V7H11.5V12H12.5Z" />
+                                    </svg>
+                                    技术领导力
+                                </div>
+                                <div class="point-content">
+                                    <ul>
+                                        <li>成为时尚科技领域的技术标杆</li>
+                                        <li>推动AI时尚领域标准建立</li>
+                                        <li>培育时尚科技创新生态</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="slide-subtitle" style="font-size: 1.5rem; margin-top: 20px;">发展里程碑</h3>
+                    <div class="chart-container">
+                        <svg width="100%" height="100%" viewBox="0 0 800 300">
+                            <text x="400" y="30" text-anchor="middle" font-size="18" font-weight="bold">智慧穿搭助手发展路线图</text>
+                            
+                            <!-- 时间轴 -->
+                            <line x1="100" y1="80" x2="700" y2="80" stroke="#333" stroke-width="2"/>
+                            
+                            <!-- 时间点 -->
+                            <circle cx="100" cy="80" r="5" fill="#5c6bc0"/>
+                            <text x="100" y="60" text-anchor="middle" font-size="12">2025/04</text>
+                            
+                            <circle cx="200" cy="80" r="5" fill="#5c6bc0"/>
+                            <text x="200" y="60" text-anchor="middle" font-size="12">2025/06</text>
+                            
+                            <circle cx="300" cy="80" r="5" fill="#5c6bc0"/>
+                            <text x="300" y="60" text-anchor="middle" font-size="12">2025/09</text>
+                            
+                            <circle cx="400" cy="80" r="5" fill="#5c6bc0"/>
+                            <text x="400" y="60" text-anchor="middle" font-size="12">2026/01</text>
+                            
+                            <circle cx="500" cy="80" r="5" fill="#5c6bc0"/>
+                            <text x="500" y="60" text-anchor="middle" font-size="12">2026/07</text>
+                            
+                            <circle cx="600" cy="80" r="5" fill="#5c6bc0"/>
+                            <text x="600" y="60" text-anchor="middle" font-size="12">2027/01</text>
+                            
+                            <circle cx="700" cy="80" r="5" fill="#5c6bc0"/>
+                            <text x="700" y="60" text-anchor="middle" font-size="12">2028/01</text>
+                            
+                            <!-- 产品开发里程碑 -->
+                            <rect x="100" y="100" width="60" height="30" rx="5" fill="#5c6bc0"/>
+                            <text x="130" y="120" text-anchor="middle" fill="white" font-size="10">MVP上线</text>
+                            
+                            <rect x="200" y="100" width="80" height="30" rx="5" fill="#5c6bc0"/>
+                            <text x="240" y="120" text-anchor="middle" fill="white" font-size="10">核心功能完善</text>
+                            
+                            <rect x="300" y="100" width="80" height="30" rx="5" fill="#5c6bc0"/>
+                            <text x="340" y="120" text-anchor="middle" fill="white" font-size="10">AI推荐优化</text>
+                            
+                            <rect x="400" y="100" width="80" height="30" rx="5" fill="#5c6bc0"/>
+                            <text x="440" y="120" text-anchor="middle" fill="white" font-size="10">虚拟试衣优化</text>
+                            
+                            <rect x="500" y="100" width="80" height="30" rx="5" fill="#5c6bc0"/>
+                            <text x="540" y="120" text-anchor="middle" fill="white" font-size="10">企业版开发</text>
+                            
+                            <rect x="600" y="100" width="80" height="30" rx="5" fill="#5c6bc0"/>
+                            <text x="640" y="120" text-anchor="middle" fill="white" font-size="10">国际化版本</text>
+                            
+                            <!-- 市场拓展里程碑 -->
+                            <rect x="130" y="150" width="60" height="30" rx="5" fill="#8e99f3"/>
+                            <text x="160" y="170" text-anchor="middle" fill="white" font-size="10">用户破5万</text>
+                            
+                            <rect x="250" y="150" width="60" height="30" rx="5" fill="#8e99f3"/>
+                            <text x="280" y="170" text-anchor="middle" fill="white" font-size="10">用户破15万</text>
+                            
+                            <rect x="350" y="150" width="60" height="30" rx="5" fill="#8e99f3"/>
+                            <text x="380" y="170" text-anchor="middle" fill="white" font-size="10">用户破20万</text>
+                            
+                            <rect x="450" y="150" width="60" height="30" rx="5" fill="#8e99f3"/>
+                            <text x="480" y="170" text-anchor="middle" fill="white" font-size="10">B端市场拓展</text>
+                            
+                            <rect x="550" y="150" width="60" height="30" rx="5" fill="#8e99f3"/>
+                            <text x="580" y="170" text-anchor="middle" fill="white" font-size="10">国际市场</text>
+                            
+                            <rect x="650" y="150" width="60" height="30" rx="5" fill="#8e99f3"/>
+                            <text x="680" y="170" text-anchor="middle" fill="white" font-size="10">全球化平台</text>
+                            
+                            <!-- 技术迭代里程碑 -->
+                            <rect x="160" y="200" width="60" height="30" rx="5" fill="#9fa8da"/>
+                            <text x="190" y="220" text-anchor="middle" fill="white" font-size="10">算法85%准确</text>
+                            
+                            <rect x="300" y="200" width="60" height="30" rx="5" fill="#9fa8da"/>
+                            <text x="330" y="220" text-anchor="middle" fill="white" font-size="10">算法90%准确</text>
+                            
+                            <rect x="420" y="200" width="60" height="30" rx="5" fill="#9fa8da"/>
+                            <text x="450" y="220" text-anchor="middle" fill="white" font-size="10">动态试衣</text>
+                            
+                            <rect x="550" y="200" width="60" height="30" rx="5" fill="#9fa8da"/>
+                            <text x="580" y="220" text-anchor="middle" fill="white" font-size="10">算法95%准确</text>
+                            
+                            <rect x="650" y="200" width="70" height="30" rx="5" fill="#9fa8da"/>
+                            <text x="685" y="220" text-anchor="middle" fill="white" font-size="10">技术标杆</text>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 结束幻灯片 -->
+        <div class="slide" id="slide-10">
+            <div class="slide-content text-center">
+                <svg width="150" height="150" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="45" fill="#5c6bc0" />
+                    <path d="M35,30 Q50,20 65,30 Q80,40 65,70 Q50,80 35,70 Q20,40 35,30" fill="#ffffff" />
+                    <circle cx="50" cy="40" r="5" fill="#5c6bc0" />
+                    <path d="M40,55 Q50,65 60,55" stroke="#5c6bc0" stroke-width="2" fill="none" />
+                </svg>
+                <h1 class="slide-title" style="font-size: 3rem;">谢谢观看</h1>
+                <h2 class="slide-subtitle">智慧穿搭助手商业计划书</h2>
+                <p style="margin-top: 20px; font-size: 1.2rem;">
+                    让每一位用户轻松获得专业级的个性化穿搭服务，<br>
+                    释放衣橱潜能，提升个人形象与自信。
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="progress-bar" id="progress-bar"></div>
+    
+    <div class="nav-buttons">
+        <button class="nav-btn" id="prev-btn">←</button>
+        <button class="nav-btn" id="next-btn">→</button>
+    </div>
+    
+    <button class="menu-btn" id="menu-btn">☰</button>
+    <div class="menu" id="menu">
+        <div class="menu-item" data-slide="1">封面</div>
+        <div class="menu-item" data-slide="2">目录</div>
+        <div class="menu-item" data-slide="3">项目简介</div>
+        <div class="menu-item" data-slide="4">行业概况</div>
+        <div class="menu-item" data-slide="5">产品介绍</div>
+        <div class="menu-item" data-slide="6">市场分析</div>
+        <div class="menu-item" data-slide="7">商业模式</div>
+        <div class="menu-item" data-slide="8">团队情况</div>
+        <div class="menu-item" data-slide="9">发展规划</div>
+        <div class="menu-item" data-slide="10">结束</div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const slides = document.querySelectorAll('.slide');
+            const progressBar = document.getElementById('progress-bar');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const menuBtn = document.getElementById('menu-btn');
+            const menu = document.getElementById('menu');
+            const menuItems = document.querySelectorAll('.menu-item');
+            
+            let currentSlide = 0;
+            const totalSlides = slides.length;
+            
+            // 更新进度条
+            function updateProgressBar() {
+                const progress = ((currentSlide + 1) / totalSlides) * 100;
+                progressBar.style.width = `${progress}%`;
+            }
+            
+            // 显示当前幻灯片
+            function showSlide(index) {
+                slides.forEach((slide, i) => {
+                    if (i === index) {
+                        slide.classList.add('active');
+                    } else {
+                        slide.classList.remove('active');
+                    }
+                });
+                
+                // 更新菜单活动项
+                menuItems.forEach((item, i) => {
+                    if (i === index) {
+                        item.classList.add('active');
+                    } else {
+                        item.classList.remove('active');
+                    }
+                });
+                
+                // 更新按钮状态
+                prevBtn.disabled = index === 0;
+                nextBtn.disabled = index === totalSlides - 1;
+                
+                // 更新进度条
+                updateProgressBar();
+            }
+            
+            // 下一张幻灯片
+            function nextSlide() {
+                if (currentSlide < totalSlides - 1) {
+                    currentSlide++;
+                    showSlide(currentSlide);
+                }
+            }
+            
+            // 上一张幻灯片
+            function prevSlide() {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    showSlide(currentSlide);
+                }
+            }
+            
+            // 按钮事件
+            nextBtn.addEventListener('click', nextSlide);
+            prevBtn.addEventListener('click', prevSlide);
+            
+            // 键盘导航
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowRight') {
+                    nextSlide();
+                } else if (e.key === 'ArrowLeft') {
+                    prevSlide();
+                }
+            });
+            
+            // 菜单开关
+            menuBtn.addEventListener('click', function() {
+                menu.classList.toggle('open');
+            });
+            
+            // 点击其他地方关闭菜单
+            document.addEventListener('click', function(e) {
+                if (!menu.contains(e.target) && e.target !== menuBtn) {
+                    menu.classList.remove('open');
+                }
+            });
+            
+            // 菜单项点击事件
+            menuItems.forEach((item, index) => {
+                item.addEventListener('click', function() {
+                    currentSlide = index;
+                    showSlide(currentSlide);
+                    menu.classList.remove('open');
+                });
+            });
+            
+            // 初始化
+            showSlide(currentSlide);
+        });
+    </script>
+</body>
+</html>
